@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Basics Explained</title>
+    <!-- Tailwind CSS CDN Setup -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        bgDark: '#0f172a',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-bgDark text-slate-100 min-h-screen relative overflow-x-hidden selection:bg-sky-500 selection:text-white">
+    
+    <!-- Background Gradient Blobs -->
+    <div class="absolute top-0 left-0 w-96 h-96 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse -z-10"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-teal-600 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse delay-1000 -z-10"></div>
+
+    <div class="max-w-6xl mx-auto px-6 py-16 relative z-10">
+        
+        <!-- Header Section -->
+        <header class="text-center mb-20">
+            <h1 class="font-heading text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent drop-shadow-lg">
+                Django Universe
+            </h1>
+            <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-6">
+                A high-level Python web framework that encourages rapid development and clean, pragmatic design.
+            </p>
+            <div class="bg-indigo-900/40 border border-indigo-500/30 rounded-xl p-4 inline-block shadow-lg">
+                <p class="text-indigo-200 font-semibold tracking-wide">
+                    🚀 <span class="text-white">Live Demo:</span> These cards below are now being fetched directly from the SQLite Database!
+                </p>
+            </div>
+        </header>
+
+        <!-- Dynamic Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+            
+            {% for concept in concepts %}
+                <div class="{% if forloop.last and concepts|length|divisibleby:2 == False %}md:col-span-2 lg:col-span-2 text-center max-w-4xl mx-auto w-full{% endif %} bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4),0_0_20px_rgba(129,140,248,0.2)] hover:bg-slate-800/80 transition-all duration-300 group">
+                    <div class="text-{% if forloop.last and concepts|length|divisibleby:2 == False %}6xl{% else %}5xl{% endif %} mb-6 drop-shadow-md transition-transform group-hover:scale-110 group-hover:{% if forloop.last and concepts|length|divisibleby:2 == False %}-rotate-6 inline-block{% else %}rotate-6{% endif %}">{{ concept.icon }}</div>
+                    <h2 class="font-heading text-{% if forloop.last and concepts|length|divisibleby:2 == False %}3xl{% else %}2xl{% endif %} text-white mb-3">{{ concept.title }}</h2>
+                    <p class="text-slate-400 leading-relaxed {% if forloop.last and concepts|length|divisibleby:2 == False %}text-lg max-w-3xl mx-auto{% endif %}">
+                        {{ concept.description }}
+                    </p>
+                </div>
+            {% empty %}
+                <div class="col-span-2 text-center py-20 text-slate-400">
+                    <p class="text-2xl mb-4">No concepts found in the database!</p>
+                </div>
+            {% endfor %}
+
+        </div>
+
+        <!-- Footer / Navigation -->
+        <div class="text-center mt-20 pb-10">
+            <a href="{% url 'about' %}" class="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-sky-500 to-indigo-500 text-white font-heading font-bold uppercase tracking-wider transition-all hover:scale-105 hover:shadow-[0_10px_20px_rgba(56,189,248,0.4)]">
+                Explore The About Page
+            </a>
+            
+            <div class="mt-12 text-slate-400 text-sm p-6 bg-slate-800/30 rounded-2xl border border-slate-700/50 inline-block max-w-2xl">
+                <p class="font-bold text-white mb-2">Want to test the Admin Panel?</p>
+                <p>1. Open your terminal and run <code class="bg-slate-900 px-2 py-1 rounded text-sky-300">python manage.py createsuperuser</code></p>
+                <p>2. Follow the prompts to create an admin account.</p>
+                <p>3. Go to <a href="/admin/" class="text-sky-400 hover:text-sky-300 underline transition-colors">/admin/</a> in your browser, log in, and you can edit or add new concept cards visually!</p>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
